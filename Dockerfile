@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM nvidia/cudagl:10.0-devel-ubuntu16.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -89,6 +89,15 @@ RUN pip install setuptools wheel && pip install -r /usr/lib/web/requirements.txt
 RUN cp /usr/share/applications/terminator.desktop /root/Desktop
 RUN echo "source /opt/ros/kinetic/setup.bash" >> /root/.bashrc
 
+ARG user=container
+ARG group=container
+ENV HOME=/home/${user}
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /etc/sudoers.d && \
+    groupadd -g ${gid} ${group} && \
+    useradd -d ${HOME} -u ${uid} -g ${gid} -m -s /bin/bash ${user} && \
+    echo "${user} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/sudoers_${user} && \
+    sudo usermod -a -G video ${user}
 EXPOSE 80
 WORKDIR /root
 ENV HOME=/home/ubuntu \
