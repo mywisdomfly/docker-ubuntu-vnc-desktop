@@ -11,7 +11,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y --no-install-recommends --allow-unauthenticated \
         supervisor \
-        openssh-server pwgen sudo vim-tiny \
+        openssh-server pwgen sudo \
         net-tools \
         lxde x11vnc xvfb \
         gtk2-engines-murrine ttf-ubuntu-font-family \
@@ -22,6 +22,7 @@ RUN apt-get update \
         gnome-themes-standard gtk2-engines-pixbuf gtk2-engines-murrine pinta arc-theme \
         dbus-x11 x11-utils \
         terminator \
+        git wget lsb-release mlocate \
     && apt-get autoclean \
     && apt-get autoremove \
     && rm -rf /var/lib/apt/lists/*
@@ -98,7 +99,7 @@ RUN export uid=1000 gid=1000 && \
     useradd -d ${HOME} -u ${uid} -g ${gid} -m -s /bin/bash ${user} && \
     echo "${user} ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/sudoers_${user} && \
     sudo usermod -a -G video ${user}
-EXPOSE 80
+
 WORKDIR /root
 ENV HOME=/home/ubuntu \
     SHELL=/bin/bash
